@@ -9,7 +9,7 @@ This is a HTTP logging with Spring Boot
 <dependency>
     <groupId>io.github.gilbertoowen</groupId>
     <artifactId>request-logging-spring-boot-starter</artifactId>
-    <version>1.0.RELEASE</version>
+    <version>1.3.RELEASE</version>
 </dependency>
 ```
 
@@ -21,9 +21,10 @@ request.logging.enabled: true
 
 ## configuration
 
-|name|type| desc                                            |
-|---|---|-------------------------------------------------| 
-|request.logging.ignoreUrl|list| url do not log, support ant path style patterns |
-|request.logging.logHeaders|boolean| log header or not, default false                |
+| name                       |type| desc                                            |
+|----------------------------|---|-------------------------------------------------|
+| request.logging.whiteList  |list| url do log, support ant path style patterns     |
+| request.logging.blackList  |list| url do not log, support ant path style patterns |
+| request.logging.logHeaders |boolean| log header or not, default false                |
 
 
