@@ -1,4 +1,4 @@
-package io.github.gilbertoowen.request.logging.cofig;
+package io.github.gilbertoowen.request.logging.config;
 
 
 import io.github.gilbertoowen.request.logging.filter.SpringLoggingFilter;
@@ -14,9 +14,13 @@ import java.util.List;
 @ConditionalOnProperty(prefix = "request.logging", name = "enabled", havingValue = "true")
 public class RequestLoggingConfig {
     /**
-     * ignore url, support ant path style patterns
+     * white url list, has higher priority than the black list, support ant path style patterns
      */
-    private List<String> ignoreUrl;
+    private List<String> whiteList;
+    /**
+     * black url list, support ant path style patterns
+     */
+    private List<String> blackList;
     /**
      * log request headers
      */
@@ -24,15 +28,23 @@ public class RequestLoggingConfig {
 
     @Bean
     public SpringLoggingFilter reactiveSpringLoggingFilter() {
-        return new SpringLoggingFilter(ignoreUrl, logHeaders);
+        return new SpringLoggingFilter(whiteList, blackList, logHeaders);
     }
 
-    public List<String> getIgnoreUrl() {
-        return ignoreUrl;
+    public List<String> getWhiteList() {
+        return whiteList;
     }
 
-    public void setIgnoreUrl(List<String> ignoreUrl) {
-        this.ignoreUrl = ignoreUrl;
+    public void setWhiteList(List<String> whiteList) {
+        this.whiteList = whiteList;
+    }
+
+    public List<String> getBlackList() {
+        return blackList;
+    }
+
+    public void setBlackList(List<String> blackList) {
+        this.blackList = blackList;
     }
 
     public boolean isLogHeaders() {

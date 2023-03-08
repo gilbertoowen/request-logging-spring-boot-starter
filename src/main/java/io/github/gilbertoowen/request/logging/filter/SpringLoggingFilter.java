@@ -21,22 +21,23 @@ import java.util.List;
 public class SpringLoggingFilter extends OncePerRequestFilter {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(SpringLoggingFilter.class);
-    private List<String> ignoreUrl;
+    private List<String> blackList;
+    private List<String> whiteList;
     private boolean logHeaders;
     protected static final PathMatcher MATCHER = new AntPathMatcher();
 
     @Autowired
     ApplicationContext context;
 
-    public SpringLoggingFilter(List<String> ignoreUrl, boolean logHeaders) {
-        this.ignoreUrl = ignoreUrl;
+    public SpringLoggingFilter(List<String> whiteList, List<String> blackList, boolean logHeaders) {
+        this.blackList = blackList;
+        this.whiteList = whiteList;
         this.logHeaders = logHeaders;
     }
 
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain) throws ServletException, IOException {
-        if (ignoreUrl != null && ignoreUrl.stream().anyMatch(p -> MATCHER.match(p, request.getRequestURI()))) {
-            chain.doFilter(request, response);
-        } else {
+        if ((whiteList != null && whiteList.stream().anyMatch(p -> MATCHER.match(p, request.getRequestURI()))) &&
+                (blackList == null || blackList.stream().noneMatch(p -> MATCHER.match(p, request.getRequestURI())))) {
             final long startTime = System.currentTimeMillis();
             final SpringRequestWrapper wrappedRequest = new SpringRequestWrapper(request);
             if (logHeaders)
@@ -56,6 +57,8 @@ public class SpringLoggingFilter extends OncePerRequestFilter {
                 throw e;
             }
             logResponse(startTime, wrappedResponse, wrappedResponse.getStatus());
+        } else {
+            chain.doFilter(request, response);
         }
     }
 

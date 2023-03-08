@@ -6,7 +6,7 @@
 
     <groupId>io.github.gilbertoowen</groupId>
     <artifactId>request-logging-spring-boot-starter</artifactId>
-    <version>1.0.RELEASE</version>
+    <version>1.3.RELEASE</version>
 
     <name>request-logging-spring-boot-starter</name>
     <description>HTTP logging with Spring Boot</description>
